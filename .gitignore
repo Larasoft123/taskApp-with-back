@@ -3,6 +3,7 @@ dist/
 
 # generated types
 .astro/
+.qodo
 
 # dependencies
 node_modules/
@@ -22,3 +23,5 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+./prisma/migrations
+dev.db
