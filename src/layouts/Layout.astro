@@ -1,26 +1,39 @@
 ---
-
+import Stars from "@/components/stars.astro";
+import Header from "@/components/header.astro";
 ---
 
+
+
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>Task App</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="es" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Task App</title>
+  </head>
+  <body class="overflow-x-hidden text-white relative">
+    <Header />
+    <Stars />
+    <slot />
+  </body>
 </html>
 
-<style>
-	@import "../styles/global.css";
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+<style is:global>
+  @import "../styles/global.css";
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    @apply bg-[radial-gradient(ellipse_at_top,_#ADD8E6_0%,_#4682B4_95%)] dark:bg-[radial-gradient(ellipse_at_top,_#080e21_0%,_#1b2735_95%)];
+  }
+  /* oscuro */
+  /* background-image: radial-gradient(ellipse at top, #080e21 0%, #1b2735 95%); */
+  /* claro */
+  /* background-image: radial-gradient(ellipse at top, #ADD8E6 0%, #4682B4 95%); */
 </style>
+
