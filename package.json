@@ -24,7 +24,7 @@
     "auth-astro": "^4.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.525.0",
+    "lucide-preact": "^0.525.0",
     "preact": "^10.26.9",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.10"
