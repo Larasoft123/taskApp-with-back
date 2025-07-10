@@ -7,6 +7,10 @@ import auth from 'auth-astro';
 
 import node from '@astrojs/node';
 
+
+import preact from '@astrojs/preact';
+
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
@@ -14,7 +18,7 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  integrations: [auth()],
+  integrations: [auth(), preact()],
 
   adapter: node({
     mode: 'standalone'
