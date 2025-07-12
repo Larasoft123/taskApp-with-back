@@ -1,13 +1,16 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { CreateTaskForm } from "@/components/forms/create-task-form.tsx";
-
-import  Button  from "@/components/Button.astro";
+import Button from "@/components/Button.astro";
 import { Plus, X } from "lucide-preact";
+import Tasks from "@/components/tasks.astro";
+import SkeletonContainer from "@/components/defer/skeleton-container.astro";
 ---
 
 <Layout>
-  <section class="bg-gray-50 mt-34 max-w-6xl mx-auto dark:bg-transparent  text-gray-800 dark:text-gray-200">
+  <section
+    class="mt-34 max-w-6xl mx-auto dark:bg-transparent text-gray-800 dark:text-gray-200"
+  >
     <!-- Header -->
     <header
       class="bg-gray-200 dark:bg-gray-950/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800"
@@ -17,18 +20,54 @@ import { Plus, X } from "lucide-preact";
           <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
             Mi Dashboard
           </h1>
-          <Button id="open-modal-btn" text={"Crear Tarea"}>
-            <Plus class="w-4 h-4 mr-2" slot={"icon-left"}  />
-      
+          <Button
+            commandfor="task-modal"
+            command="show-modal"
+            id="open-modal-btn"
+            text={"Crear Tarea"}
+          >
+            <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
           </Button>
         </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <div class="pt-24 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Example Task Card 1 -->
+    <div class="pt-24 container mx-auto text-white px-4 sm:px-6 lg:px-8 py-8">
+      <Tasks server:defer>
+        <SkeletonContainer numberOfCards={9} slot="fallback" />
+      </Tasks>
+    </div>
+  </section>
+  <!-- Modal para Crear Tarea -->
+  <dialog
+    id="task-modal"
+    class="fixed inset-0 bg-transparent mx-auto my-auto bg-opacity-60 items-center justify-center z-50 transition-opacity duration-300"
+  >
+    <div
+      id="modal-content"
+      class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl px-20 py-10 inset-0 w-full relative"
+    >
+      <Button
+        commandfor="task-modal"
+        command="close"
+        id="close-modal-btn"
+        class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+      >
+        <X class="w-6 h-6" slot={"icon-right"} />
+      </Button>
+      <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        Crear nueva tarea
+      </h2>
+      <CreateTaskForm client:load />
+    </div>
+  </dialog>
+</Layout>
+
+<!--
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+       
+        
         <div
           class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
         >
@@ -62,7 +101,7 @@ import { Plus, X } from "lucide-preact";
           </div>
         </div>
 
-        <!-- Example Task Card 2 -->
+        
         <div
           class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
         >
@@ -89,68 +128,5 @@ import { Plus, X } from "lucide-preact";
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Modal para Crear Tarea -->
-  <dialog
-    id="task-modal"
-    class="fixed inset-0 bg-transparent mx-auto my-auto bg-opacity-60 items-center   justify-center z-50 transition-opacity duration-300"
-  >
-    <div
-      id="modal-content"
-      class="bg-white dark:bg-gray-800  rounded-2xl shadow-xl px-20 py-10 inset-0  w-full relative"
-    >
-      <button
-        id="close-modal-btn"
-        class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-      >
-        <X class="w-6 h-6" />
-      </button>
-      <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-        Crear nueva tarea
-      </h2>
-      <CreateTaskForm client:load />
-    </div>
-  </dialog>
-</Layout>
-
-<script>
-  const openModalBtn = document.getElementById("open-modal-btn");
-  
-  const closeModalBtn = document.getElementById("close-modal-btn");
-
-  const modal = document.getElementById("task-modal") as HTMLDialogElement;
-
-  function showModal() {
-    if (!modal) return;
-    modal.showModal()
- 
-  }
-
-  function hideModal() {
-    if (!modal) return;
-     modal.close()
-  
-  }
-
-  openModalBtn?.addEventListener("click", showModal);
-  closeModalBtn?.addEventListener("click", hideModal);
-
-  // Cerrar el modal al hacer clic fuera del contenido
-  modal?.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      hideModal();
-    }
-  });
-
-  // Cerrar el modal al presionar la tecla Escape
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      hideModal();
-    }
-  });
-</script>
-
-</Layout>
+      </div> -->
