@@ -93,7 +93,7 @@ model Tasks {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user User @relation(fields: [userId], references: [id])
-  userId String @unique
+  userId String
   @@map("tasks")
 }
 
@@ -109,6 +109,3 @@ enum Status {
     DONE
     IN_PROGRESS
 }
-
-
-
