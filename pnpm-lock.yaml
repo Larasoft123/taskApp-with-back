@@ -53,12 +53,18 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      invokers-polyfill:
+        specifier: ^0.5.5
+        version: 0.5.5
       lucide-preact:
         specifier: ^0.525.0
         version: 0.525.0(preact@10.26.9)
       preact:
         specifier: ^10.26.9
         version: 10.26.9
+      react-hook-form:
+        specifier: ^7.60.0
+        version: 7.60.0(react@19.1.0)
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
@@ -2056,6 +2062,9 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
+  invokers-polyfill@0.5.5:
+    resolution: {integrity: sha512-78dqWtGBnpHGfCOXOVycJC4Ry2faxIlUWt/Qil7nosaEHg1vcmamwFEdN/1g/ldPp5XaRrRuRLTya7SQF36AwQ==}
+
   iron-webcrypto@1.2.1:
     resolution: {integrity: sha512-feOM6FaSr6rEABp/eDfVseKyTMDt+KGpeB35SkVn9Tyn0CqvVsY3EwI0v5i8nMHyJnzCIQf7nsy3p41TPkJZhg==}
 
@@ -2630,6 +2639,12 @@ packages:
     resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
     peerDependencies:
       react: ^19.1.0
+
+  react-hook-form@7.60.0:
+    resolution: {integrity: sha512-SBrYOvMbDB7cV8ZfNpaiLcgjH/a1c7aK0lK+aNigpf4xWLO8q+o4tcvVurv3c4EOyzn/3dCsYt4GKD42VvJ/+A==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
 
   react-refresh@0.17.0:
     resolution: {integrity: sha512-z6F7K9bV85EfseRCp2bzrpyQ0Gkw1uLoCel9XBVWPg/TjRj94SkJzUTGfOa4bs7iJvBWtQG0Wq7wnI0syw3EBQ==}
@@ -5321,6 +5336,8 @@ snapshots:
 
   inherits@2.0.4: {}
 
+  invokers-polyfill@0.5.5: {}
+
   iron-webcrypto@1.2.1: {}
 
   is-arrayish@0.3.2:
@@ -6015,6 +6032,10 @@ snapshots:
     dependencies:
       react: 19.1.0
       scheduler: 0.26.0
+
+  react-hook-form@7.60.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   react-refresh@0.17.0: {}
 
