@@ -4,6 +4,7 @@ import { defineConfig } from "auth-astro";
 import { config } from "@/config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
+import { getUserById } from "@/utils/auth/user";
 
 export default defineConfig({
   adapter: PrismaAdapter(db),
@@ -20,37 +21,56 @@ export default defineConfig({
 
   session: {
     strategy: "jwt",
-    },
-  pages: {
-    signIn: "/auth",
-    error: "/auth/error",
   },
+
+  pages: {},
   theme: {
     colorScheme: "dark",
   },
   callbacks: {
-	
-    jwt: async (params) => {
-		console.log("jwt ",params)
-		
-		return {}
+    jwt: async ({ token }) => {
+      if (!token.sub) return token;
 
-	},
+ 
+      const user = await getUserById(token.sub);
+      if (!user) return token;
 
-	signIn: async (params) => {
-		console.log("sigin ",params)
-		return true
-	},
+      
+      token.name = user.name;
+      token.email = user.email;
+      token.picture = user.image;
 
-	session: async (params) => {
-		console.log("session ",params)
+      return token;
+    },
 
+    signIn: async (params) => {
+      return true;
+    },
 
-		return params.session
-	}
+    session: async ({ token, session, user }) => {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+      }
 
-
+      return session;
+    },
   },
 
-  events: {},
+  //   events: {
+  //     signIn: async (user) => {
+  //       console.log("signIn");
+  //     },
+  //     signOut: async (user) => {
+  //       console.log("signOut");
+  //     },
+  //     session: async (session) => {
+  //       console.log("session2");
+  //     },
+  //     createUser: async (user) => {
+  //       console.log("createUser");
+  //     },
+  //     linkAccount : async (user) => {
+  //       console.log("linkAccount");
+  //     },
+  // }
 });
