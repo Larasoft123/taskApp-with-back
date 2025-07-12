@@ -17,9 +17,15 @@ import Header from "@/components/header.astro";
   <body class="overflow-x-hidden text-white relative">
     <Header />
     <Stars />
+    <main>
     <slot />
+    </main>
   </body>
 </html>
+
+<script>
+  import "invokers-polyfill";
+</script>
 
 <style is:global>
   @import "../styles/global.css";
