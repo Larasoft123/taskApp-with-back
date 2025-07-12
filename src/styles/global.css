@@ -1,1 +1,11 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+textarea{
+ field-sizing: content !important;
+ resize: none !important;
+
+}
