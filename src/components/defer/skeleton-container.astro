@@ -1,0 +1,25 @@
+---
+import SkeletonCard from "./skeleton-card.astro";
+interface Props {
+    numberOfCards?: number;
+}
+
+const { numberOfCards= 3 } = Astro.props;
+
+---
+
+
+<div  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+    {
+        Array(numberOfCards).fill(0).map((_, index) => {
+            return <SkeletonCard />;
+        })
+    }
+
+
+
+
+
+
+</div>
