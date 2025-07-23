@@ -19,6 +19,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  tags Tags[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
  
@@ -89,6 +90,7 @@ model Tasks {
   title   String
   status Status @default(PENDING)
   description String?
+  tags Tags[]
   type TypeTask @default(ONCE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -97,6 +99,17 @@ model Tasks {
   @@map("tasks")
 }
 
+
+model Tags {
+  id Int @id @default(autoincrement())
+  userId String 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name String
+  tasks Tasks[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("tags")
+}
 
 
 enum TypeTask {
