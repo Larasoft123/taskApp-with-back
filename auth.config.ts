@@ -6,24 +6,31 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import { getUserById } from "@/utils/auth/user";
 
+
+
 export default defineConfig({
   adapter: PrismaAdapter(db),
 
   secret: config.env.AUTH_SECRET,
   providers: [
     Google({
-      clientId: config.env.GOGGLE_CLIENT_ID,
-      clientSecret: config.env.GOGGLE_CLIENT_SECRET,
+      clientId: config.env.GOOGLE_CLIENT_ID,
+      clientSecret: config.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
 
-  cookies: {},
+  
+  
 
   session: {
     strategy: "jwt",
   },
 
-  pages: {},
+  pages: {
+    error: "/auth/error",
+    signIn: "/auth"
+
+  },
   theme: {
     colorScheme: "dark",
   },
@@ -56,21 +63,5 @@ export default defineConfig({
     },
   },
 
-  //   events: {
-  //     signIn: async (user) => {
-  //       console.log("signIn");
-  //     },
-  //     signOut: async (user) => {
-  //       console.log("signOut");
-  //     },
-  //     session: async (session) => {
-  //       console.log("session2");
-  //     },
-  //     createUser: async (user) => {
-  //       console.log("createUser");
-  //     },
-  //     linkAccount : async (user) => {
-  //       console.log("linkAccount");
-  //     },
-  // }
+
 });
