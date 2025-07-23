@@ -3,24 +3,18 @@ interface Props {
   isLink?: boolean;
   className?: string;
   href?: string;
-  text: string;
+  text?: string;
   [key: string]: any;
 }
 
-const {
- 
-  isLink = false,
-  className,
-  href,
-  text,
-} = Astro.props;
+const { isLink = false, className, href, text } = Astro.props;
 ---
 
 {
   isLink ? (
     <a
-       {...Astro.props}
-      class={` inline-flex items-center space-x-3 justify-center whitespace-nowrap rounded-md text-sm text-black dark:text-white  font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-neutral-700 focus-visible:ring-neutral-500 border border-neutral-200 bg-neutral-200 shadow-sm hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-950 dark:hover:text-neutral-50 dark:hover:border-neutral-700/50 h-9 px-4 py-2 group ${className}`}
+      {...Astro.props}
+      class={`cursor-pointer inline-flex items-center space-x-3 justify-center whitespace-nowrap rounded-md text-sm text-black dark:text-white  font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-neutral-700 focus-visible:ring-neutral-500 border border-neutral-200 bg-neutral-200 shadow-sm hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-950 dark:hover:text-neutral-50 dark:hover:border-neutral-700/50 h-9 px-4 py-2 group ${className}`}
       href={`${href}`}
     >
       <slot name="icon-left" />
@@ -30,12 +24,12 @@ const {
   ) : (
     <button
       {...Astro.props}
-      class={` inline-flex items-center space-x-3 justify-center whitespace-nowrap rounded-md text-sm text-black dark:text-white  font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-neutral-700 focus-visible:ring-neutral-500 border border-neutral-200 bg-neutral-200 shadow-sm hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-950 dark:hover:text-neutral-50 dark:hover:border-neutral-700/50 h-9 px-4 py-2 group ${className}`}
+      class={`cursor-pointer inline-flex items-center space-x-3 justify-center whitespace-nowrap rounded-md text-sm text-black dark:text-white  font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-neutral-700 focus-visible:ring-neutral-500 border border-neutral-200 bg-neutral-200 shadow-sm hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-950 dark:hover:text-neutral-50 dark:hover:border-neutral-700/50 h-9 px-4 py-2 group ${className}`}
     >
       <slot name="icon-left" />
-      <span>{text}</span>
+      {text && <span>{text}</span>}
+
       <slot name="icon-right" />
     </button>
   )
 }
-
