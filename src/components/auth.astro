@@ -1,14 +1,14 @@
 ---
-import { getSession } from "auth-astro/server";
 import GoggleIcon from "@/components/icons/goggle.svg";
 import Button from "@/components/Button.astro";
-
 ---
 
 <div
   class="flex mx-auto max-w-lg rounded-xl border-2 gap-y-3 p-6 flex-col items-center"
 >
-  <h1 class="font-semibold text-balance text-black dark:text-white text-4xl text-center">
+  <h1
+    class="font-semibold text-balance text-black dark:text-white text-4xl text-center"
+  >
     Log in to TaskApp
   </h1>
   <p class="text-neutral-600 dark:text-neutral-200 text-pretty text-center">
@@ -21,16 +21,16 @@ import Button from "@/components/Button.astro";
   </div>
 </div>
 
-
-
-
 <script>
   import { $ } from "@/lib/dom-selector.ts";
-  const { signIn} = await import("auth-astro/client");
+  const { signIn } = await import("auth-astro/client");
 
-  const $loginGoggle = $("#login-goggle");
+  document.addEventListener("astro:page-load", () => {
+    const $loginGoggle = $("#login-goggle");
 
-  $loginGoggle?.addEventListener("click", async () => {
-    await signIn("goggle");
+    $loginGoggle?.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await signIn("google");
+    });
   });
 </script>
