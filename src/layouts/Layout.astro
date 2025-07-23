@@ -1,10 +1,8 @@
 ---
 import Stars from "@/components/stars.astro";
 import Header from "@/components/header.astro";
+import { ClientRouter } from "astro:transitions";
 ---
-
-
-
 
 <!doctype html>
 <html lang="es" class="">
@@ -13,12 +11,13 @@ import Header from "@/components/header.astro";
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Task App</title>
+    <ClientRouter />
   </head>
   <body class="overflow-x-hidden text-white relative">
-    <Header />
+    <Header transition:persist />
     <Stars />
     <main>
-    <slot />
+      <slot />
     </main>
   </body>
 </html>
@@ -34,12 +33,12 @@ import Header from "@/components/header.astro";
     margin: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
     @apply bg-[radial-gradient(ellipse_at_top,_#ADD8E6_0%,_#4682B4_95%)] dark:bg-[radial-gradient(ellipse_at_top,_#080e21_0%,_#1b2735_95%)];
   }
+
   /* oscuro */
   /* background-image: radial-gradient(ellipse at top, #080e21 0%, #1b2735 95%); */
   /* claro */
   /* background-image: radial-gradient(ellipse at top, #ADD8E6 0%, #4682B4 95%); */
 </style>
-
