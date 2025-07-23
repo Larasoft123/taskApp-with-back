@@ -1,5 +1,11 @@
 ---
-import { Status, TypeTask, type Tasks } from "@prisma/client";
+import { Status, TypeTask } from "@prisma/client";
+
+import TaskBadge from "@/components/task-badge.astro";
+import { DeleteButton } from "@/components/delete-button.tsx";
+import Button from "@/components/Button.astro";
+import { CreateTaskForm } from "@/components/forms/create-task-form.tsx";
+import {  X } from "lucide-preact";
 
 interface Props {
   // userImage: string;
@@ -14,26 +20,24 @@ interface Props {
   description: string | null;
 }
 
-const { title, tag, description, status, type } = Astro.props;
+const { title, id, tag, description, status, type } = Astro.props;
 ---
 
-<div
-  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
->
-  <div class="flex justify-between items-start">
+<div class="task-card bg-white/80 dark:bg-gray-800 rounded-lg shadow-md p-6">
+  <div class="flex justify-between items-center">
     <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100">
       {title}
     </h3>
 
-    <span
-      class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
-      >Diseño</span
-    >
+    <div class="flex flex-col gap-y-2.5 justify-end items-end">
+      <TaskBadge status={status} />
+      <TaskBadge type={type} />
+    </div>
   </div>
 
   {
     description && (
-      <p class="text-gray-600 dark:text-gray-400 mt-2">{description}</p>
+      <p class="text-gray-600 text-sm dark:text-gray-400 mt-2">{description}</p>
     )
   }
 
@@ -47,4 +51,33 @@ const { title, tag, description, status, type } = Astro.props;
       /> -->
     </div>
   </div>
+
+  
+
+  <div class="flex justify-between items-center mt-4">
+    <Button text={"editar"} commandfor={`task-modal-${id}`} command="show-modal" />
+
+    <DeleteButton client:load id={id} />
+  </div>
 </div>
+
+<dialog
+  id={`task-modal-${id}`}
+  class="fixed inset-0 bg-transparent mx-auto my-auto bg-opacity-60 items-center justify-center z-50 transition-opacity duration-300"
+>
+  <div
+    id="modal-content"
+    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl px-20 py-10 inset-0 w-full relative"
+  >
+    <Button
+      commandfor={`task-modal-${id}`}
+      command="close"
+      id="close-modal-btn"
+      class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+    >
+      <X class="w-6 h-6" slot={"icon-right"} />
+    </Button>
+
+    <CreateTaskForm client:visible edit={true} taskId={id} />
+  </div>
+</dialog>
