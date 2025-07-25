@@ -25,7 +25,6 @@ export const DELETE: APIRoute = async ({ params, request }) => {
   }
 };
 
-
 export const GET: APIRoute = async ({ params, request }) => {
   const id = Number(params.id);
 
@@ -40,6 +39,9 @@ export const GET: APIRoute = async ({ params, request }) => {
       where: {
         id,
       },
+      include: {
+        tags: true,
+      },
     });
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
@@ -48,33 +50,64 @@ export const GET: APIRoute = async ({ params, request }) => {
   }
 };
 
-
-
 export const PATCH: APIRoute = async ({ request, params }) => {
   const id = Number(params.id);
   const body = await request.json();
-  const { title, description, status, type } = body;
+  const { title, description, status, type, tags: newTags } = body;
 
   const { userId } = await getUserSession(request);
   if (!userId) return new Response("userId is required", { status: 400 });
+
+  
+  const [tagsIds] = await db.tasks.findMany({
+    where: {
+      id,
+    },
+    select: {
+      tags: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  const { tags: oldTags } = tagsIds;
+
+  const oldTagsIdsSet = new Set(oldTags.map((tag: any) => tag.id));
+  const newTagsIdsSet = new Set(newTags);
+  const tagsToDelete = oldTagsIdsSet.difference(newTagsIdsSet);
+  const tagsToAdd = newTagsIdsSet.difference(oldTagsIdsSet);
+ 
+  
+  
+
+  
+
+
+
 
   const data = {
     title,
     description,
     status,
     type,
+    tags: { 
+      disconnect: [...tagsToDelete].map((tag: number) => ({ id: tag })), 
+      connect: [...tagsToAdd].map((tag: number) => ({ id: tag }) ) 
+    },
   };
 
   try {
     const result = await db.tasks.update({
       data,
+ 
       where: {
-        id
+        id,
       },
     });
 
-    console.log({result})
-
+ 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
     console.log(error);
