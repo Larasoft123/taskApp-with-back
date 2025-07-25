@@ -20,6 +20,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   tags Tags[]
+  notes Notes[]
+
   // Optional for WebAuthn support
   Authenticator Authenticator[]
  
@@ -94,6 +96,7 @@ model Tasks {
   type TypeTask @default(ONCE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  expiresAt DateTime?
   user User @relation(fields: [userId], references: [id])
   userId String
   @@map("tasks")
@@ -111,6 +114,29 @@ model Tags {
   @@map("tags")
 }
 
+
+model Notes {
+  id Int @id @default(autoincrement())
+  userId String 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title String
+  solutions Solutions[]
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("notes")
+}
+
+
+model Solutions {
+  id Int @id @default(autoincrement())
+  noteId Int
+  note Notes @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("solutions")
+}
 
 enum TypeTask {
     DAYLY
