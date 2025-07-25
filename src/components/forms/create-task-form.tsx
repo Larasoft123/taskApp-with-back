@@ -2,57 +2,96 @@
 import { Calendar, FileText, Tag, ListTodo } from "lucide-preact";
 import { useForm } from 'react-hook-form';
 import { navigate } from "astro:transitions/client"
-import { useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 // Definimos los tipos basados en el schema.prisma para mayor seguridad
 type Status = "PENDING" | "IN_PROGRESS" | "DONE";
 type TypeTask = "ONCE" | "DAYLY";
 
+interface Tag {
+  id: number;
+  name: string;
+}
+
 interface CreateTaskFormProps {
 
   edit?: boolean;
-  taskId?: Number
+  taskId?: number;
   // Podrías añadir una función `onSubmitSuccess` para manejar el estado en el componente padre
   // onSubmitSuccess?: (newTask: any) => void;
 }
-
+type CreateTaskFormData = { title: string; description?: string; status: Status; type: TypeTask, tags: number[] };
 export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
 
-  type CreateTaskFormData = { title: string; description?: string; status: Status; type: TypeTask };
 
 
 
-  const { reset, setValue,control, register, handleSubmit, formState: { isSubmitting, errors } } = useForm<CreateTaskFormData>()
 
+  const { reset, setValue, control, register, handleSubmit, formState: { isSubmitting, errors } } = useForm<CreateTaskFormData>({
+    defaultValues: {
+      tags: []
+    }
+  })
+  const [disponibleTags, setDisponibleTags] = useState<Tag[]>([])
+  const [selectedTags, setSelectedTags] = useState<number[]>([])
 
 
   useEffect(() => {
-
-    if (edit) {
-      
-      async function getData() {
-        const res = await fetch(`/api/${taskId}/task`);
-        const data = await res.json()
-        const {title,type,description,status} = data
-        setValue("title",title)
-        setValue("type",type)
-        setValue("description",description)
-        setValue("status",status)
-     
+    const fetchData = async () => {
+      // 1. Obtener todas las etiquetas disponibles
+      try {
+        const tagsRes = await fetch('/api/tags');
+        if (tagsRes.ok) {
+          const tagsData = await tagsRes.json();
+          setDisponibleTags(tagsData);
+        }
+      } catch (error) {
+        console.error("Fallo al obtener las etiquetas:", error);
       }
-      
-      getData()
-    }
-   
 
+      // 2. Si estamos en modo edición, obtener los datos de la tarea
+      if (edit && taskId) {
+        try {
+          const taskRes = await fetch(`/api/${taskId}/task`);
+          const data = await taskRes.json();
+          const { title, type, description, status, tags } = data;
+          setValue("title", title);
+          setValue("type", type);
+          setValue("description", description);
+          setValue("status", status);
 
-  }, [])
+          // Pre-seleccionar las etiquetas existentes de la tarea
+          if (tags && Array.isArray(tags)) {
+            const tagIds = tags.map((tag: Tag) => tag.id);
+            setSelectedTags(tagIds);
+            setValue("tags", tagIds);
+          }
+        } catch (error) {
+          console.error("Fallo al obtener los datos de la tarea:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [edit, taskId, setValue]);
+
+  const handleTagClick = (tagId: number) => {
+    const newSelectedTags = selectedTags.includes(tagId)
+      ? selectedTags.filter(id => id !== tagId) // Deseleccionar
+      : [...selectedTags, tagId]; // Seleccionar
+    setSelectedTags(newSelectedTags);
+    setValue("tags", newSelectedTags, { shouldValidate: true });
+  };
 
 
   const onSubmit = async (data: CreateTaskFormData) => {
-    const { title, description, status, type } = data
+    const { title, description, status, type, tags } = data
+
+  
 
 
+   
+    
     if (!edit) {
       const res = await fetch("/api/tasks", {
         method: "POST",
@@ -64,6 +103,7 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
           description,
           status,
           type,
+          tags // Asegúrate de que el backend pueda manejar esto
         }),
       });
 
@@ -81,6 +121,7 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
         description,
         status,
         type,
+        tags // Asegúrate de que el backend pueda manejar esto
       })
     });
 
@@ -157,6 +198,33 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
               </select>
             </div>
           </div>
+
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              <Tag className="w-4 h-4" /> Etiquetas (Selecciona una o más)
+            </label>
+            <div className="flex flex-wrap gap-2 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-800 min-h-[40px]">
+              {disponibleTags.length > 0 ? (
+                disponibleTags.map((tag) => (
+                  <button
+                    type="button"
+                    key={tag.id}
+                    onClick={() => handleTagClick(tag.id)}
+                    className={`px-3 py-1 text-sm font-medium rounded-full transition-colors duration-200 ${selectedTags.includes(tag.id)
+                        ? 'bg-blue-600 text-white ring-2 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-800 ring-blue-500'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+                      }`}
+                  >
+                    {tag.name}
+                  </button>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500 dark:text-gray-400">No hay etiquetas disponibles. Crea una primero.</p>
+              )}
+            </div>
+          </div>
+
+
 
           {errors && <p className="text-sm text-red-500">{errors.root?.message}</p>}
 
