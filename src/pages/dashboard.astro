@@ -5,6 +5,7 @@ import Button from "@/components/Button.astro";
 import { Plus, X } from "lucide-preact";
 import Tasks from "@/components/tasks.astro";
 import SkeletonContainer from "@/components/defer/skeleton-container.astro";
+import {CreateTagForm} from "@/components/forms/create-tag-form";
 ---
 
 <Layout>
@@ -20,14 +21,20 @@ import SkeletonContainer from "@/components/defer/skeleton-container.astro";
           <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
             Mi Dashboard
           </h1>
-          <Button
-            commandfor="task-modal"
-            command="show-modal"
-            id="open-modal-btn"
-            text={"Crear Tarea"}
-          >
-            <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
-          </Button>
+
+          <div class="flex justify-center gap-4">
+            <Button
+              commandfor="task-modal"
+              command="show-modal"
+              text={"Crear Tarea"}
+            >
+              <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
+            </Button>
+
+            <Button text={"Crear Etiqueta"} commandfor="tag-modal" command="show-modal">
+              <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
+            </Button>
+          </div>
         </div>
       </div>
     </header>
@@ -45,21 +52,38 @@ import SkeletonContainer from "@/components/defer/skeleton-container.astro";
     class="fixed inset-0 bg-transparent mx-auto my-auto bg-opacity-60 items-center justify-center z-50 transition-opacity duration-300"
   >
     <div
-      id="modal-content"
+    
       class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl px-20 py-10 inset-0 w-full relative"
     >
       <Button
         commandfor="task-modal"
         command="close"
-        id="close-modal-btn"
         class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
       >
         <X class="w-6 h-6" slot={"icon-right"} />
       </Button>
-      <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-        Crear nueva tarea
-      </h2>
-      <CreateTaskForm client:load />
+
+      <CreateTaskForm client:visible />
+    </div>
+  </dialog>
+
+  <!-- modal para crear tags -->
+  <dialog
+    id="tag-modal"
+    class="fixed inset-0 bg-transparent mx-auto my-auto bg-opacity-60 items-center justify-center z-50 transition-opacity duration-300"
+  >
+    <div
+
+      class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl px-20 py-10 inset-0 w-full relative"
+    >
+      <Button
+        commandfor="tag-modal"
+        command="close"
+        class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+      >
+        <X class="w-6 h-6" slot={"icon-right"} />
+      </Button>
+      <CreateTagForm client:visible/>
     </div>
   </dialog>
 </Layout>
