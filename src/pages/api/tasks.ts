@@ -2,7 +2,7 @@ import { type APIRoute } from "astro";
 import { db } from "@/lib/db";
 import { getUserSession } from "@/utils/auth/getSession";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
@@ -15,6 +15,9 @@ export const GET: APIRoute = async ({ request }) => {
     where: {
       userId,
     },
+    include: {
+      tags: true
+    }
   });
 
   // await delay(50);
