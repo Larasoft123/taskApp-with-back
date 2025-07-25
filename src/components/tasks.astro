@@ -1,5 +1,6 @@
 ---
 import { Status, TypeTask, type Tasks } from "@prisma/client";
+
 import TaskCard from "@/components/task-card.astro";
 import { getSession } from "auth-astro/server";
 import type { Session, User } from "@auth/core/types";
@@ -10,8 +11,8 @@ interface Props {
 }
 
 const {
-  user: { id, image },
-} = await getSession(Astro.request) as Session;
+  user: { id },
+} = (await getSession(Astro.request)) as Session;
 
 const { type = "ALL", status = "ALL" } = Astro.props;
 
@@ -20,17 +21,15 @@ const url = new URL("/api/tasks", Astro.url.origin);
 
 // Agrega los parámetros de búsqueda (query parameters)
 if (type !== "ALL") {
-    url.searchParams.append("type", type);
+  url.searchParams.append("type", type);
 }
 
 if (status !== "ALL") {
-    url.searchParams.append("status", status);
+  url.searchParams.append("status", status);
 }
 
 url.searchParams.append("userId", id);
-const completeUrl = url.toString();
 
-console.log({completeUrl})
 
 const response = await fetch(`http://localhost:4321/api/tasks?userId=${id}`, {
   method: "GET",
@@ -39,9 +38,7 @@ const response = await fetch(`http://localhost:4321/api/tasks?userId=${id}`, {
   },
 });
 
-
-const tasks: Tasks[] =  await response.json();
-
+const tasks: Tasks[] = await response.json();
 ---
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
