@@ -4,6 +4,7 @@ import Container from "@/components/container.astro";
 import ContainerHeader from "@/components/containerHeader.astro";
 import Button from "@/components/Button.astro";
 import { Plus, X } from "lucide-preact";
+import { SidenavNotes } from "@/components/sidenavNotes.tsx";
 ---
 
 <SidebarLayout>
@@ -21,5 +22,6 @@ import { Plus, X } from "lucide-preact";
         <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
       </Button>
     </ContainerHeader>
+    <SidenavNotes client:visible/>
   </Container>
 </SidebarLayout>
