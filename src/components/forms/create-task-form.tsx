@@ -87,11 +87,11 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
   const onSubmit = async (data: CreateTaskFormData) => {
     const { title, description, status, type, tags } = data
 
-  
 
 
-   
-    
+
+
+
     if (!edit) {
       const res = await fetch("/api/tasks", {
         method: "POST",
@@ -211,8 +211,8 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
                     key={tag.id}
                     onClick={() => handleTagClick(tag.id)}
                     className={`px-3 py-1 text-sm font-medium rounded-full transition-colors duration-200 ${selectedTags.includes(tag.id)
-                        ? 'bg-blue-600 text-white ring-2 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-800 ring-blue-500'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+                      ? 'bg-blue-600 text-white ring-2 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-800 ring-blue-500'
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
                       }`}
                   >
                     {tag.name}
@@ -228,7 +228,13 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
 
           {errors && <p className="text-sm text-red-500">{errors.root?.message}</p>}
 
-          <div className="flex justify-end pt-2">
+          <div className="flex justify-end gap-x-6 pt-2">
+            
+            <a href={"/dashboard"} className="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed">
+              Cancelar
+            </a>
+
+
             <button type="submit" disabled={isSubmitting} className="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
               {isSubmitting ? 'Guardando...' : edit ? "Editar Tarea" : "Crear Tarea"}
             </button>
