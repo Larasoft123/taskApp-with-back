@@ -1,0 +1,16 @@
+---
+import Layout from "./Layout.astro";
+import SideBar from "@/components/sidebar.astro";
+
+
+---
+
+<Layout>
+  <div class="flex lg:gap-x-12">
+    <SideBar transition:persist />
+    <slot  />
+  </div>
+</Layout>
+
+
+
