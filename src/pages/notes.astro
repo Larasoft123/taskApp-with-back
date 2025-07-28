@@ -1,0 +1,25 @@
+---
+import SidebarLayout from "@/layouts/sidebarLayout.astro";
+import Container from "@/components/container.astro";
+import ContainerHeader from "@/components/containerHeader.astro";
+import Button from "@/components/Button.astro";
+import { Plus, X } from "lucide-preact";
+---
+
+<SidebarLayout>
+  <Container>
+    <ContainerHeader title="Mis notas">
+      <Button commandfor="task-modal" command="show-modal" text={"Crear Nota"}>
+        <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
+      </Button>
+
+      <Button
+        text={"Crear Etiqueta"}
+        commandfor="tag-modal"
+        command="show-modal"
+      >
+        <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
+      </Button>
+    </ContainerHeader>
+  </Container>
+</SidebarLayout>
