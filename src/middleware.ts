@@ -1,7 +1,8 @@
 import { defineMiddleware } from "astro:middleware";
 import { getSession } from "auth-astro/server";
 
-const protectedRoutes = [/\/dashboard/,/\/notes/,/\/tasks/,/\/task\/\d+/,/api/];
+const protectedRoutes = [/\/dashboard/,/\/notes/,/^\/tasks$/,/\/task\/\d+/];
+const apiProtected = [/\/api\\tasks/,/\/api\\tags/,/\/api\/\d+\/task/]
 const authRoute = "/auth";
 
 
@@ -18,7 +19,6 @@ export const onRequest = defineMiddleware(
 
 
     if (protectedRoutes.some((route) => route.test(pathname)) && !session) {
-    
       return redirect(`/auth`);
     }
 
