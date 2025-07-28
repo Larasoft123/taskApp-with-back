@@ -104,6 +104,7 @@ export const PATCH: APIRoute = async ({ request, params }) => {
  
       where: {
         id,
+        userId,
       },
     });
 
