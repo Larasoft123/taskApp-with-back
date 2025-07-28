@@ -1,0 +1,25 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Container from "@/components/container.astro";
+import { CreateTaskForm } from "@/components/forms/create-task-form";
+import { getSession } from "auth-astro/server";
+
+const session = await getSession(Astro.request);
+const { id } = Astro.params;
+
+if (!session || !session?.user?.id ) {
+  throw new Error("Unauthorized access. Please log in.");
+}
+
+
+
+if (!id) {
+  throw new Error("Task ID is required");
+}
+---
+
+<Layout>
+  <Container>
+    <CreateTaskForm client:visible edit={true} taskId={+id} />
+  </Container>
+</Layout>
