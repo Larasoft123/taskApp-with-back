@@ -1,0 +1,58 @@
+---
+import {  Notebook, type AstroComponent,LayoutDashboardIcon,Tags } from "@lucide/astro";
+
+interface Link {
+  href: string;
+  label: string;
+  icon?: AstroComponent;
+}
+
+const links: Link[] = [ 
+
+  {
+    href: "/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboardIcon ,
+  },
+  {
+    href: "/notes",
+    label: "Notes",
+    icon: Notebook ,
+  },
+  {
+    href: "/tasks",
+    label: "Tasks",
+    icon: Tags ,
+  },
+];
+---
+
+<aside
+  id="sidebar"
+  class="lg:mt-34 fixed lg:relative top-0 h-screen left-0 z-100 w-64 lg:h-[75vh] transition-transform -translate-x-full lg:translate-x-0"
+  aria-label="Sidebar"
+>
+  <div
+    class="h-full px-3 py-4 overflow-y-auto rounded bg-gray-50 dark:bg-gray-800"
+  >
+    <ul class="space-y-2 font-medium pt-2">
+  
+
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+            >
+              {link.icon && <link.icon class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>}
+              <span class="ms-3">{link.label}</span>
+            </a>
+          </li>
+        ))
+      }
+
+  
+    </ul>
+  </div>
+</aside>
