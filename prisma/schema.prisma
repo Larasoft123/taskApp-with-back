@@ -94,6 +94,7 @@ model Tasks {
   description String?
   tags Tags[]
   type TypeTask @default(ONCE)
+  priority Priority @default(MEDIUM)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   expiresAt DateTime?
@@ -132,6 +133,7 @@ model Solutions {
   id Int @id @default(autoincrement())
   noteId Int
   note Notes @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  title String
   content String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -147,4 +149,10 @@ enum Status {
     PENDING
     DONE
     IN_PROGRESS
+}
+
+enum Priority {
+    LOW
+    MEDIUM
+    HIGH
 }
