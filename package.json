@@ -15,6 +15,7 @@
     "@auth/core": "^0.37.4",
     "@auth/prisma-adapter": "^2.10.0",
     "@libsql/client": "^0.15.9",
+    "@lucide/astro": "^0.532.0",
     "@prisma/adapter-libsql": "^6.11.1",
     "@prisma/client": "6.11.1",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
