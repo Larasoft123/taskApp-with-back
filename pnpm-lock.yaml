@@ -29,6 +29,9 @@ importers:
       '@lucide/astro':
         specifier: ^0.532.0
         version: 0.532.0(astro@5.10.0(@types/node@24.0.3)(jiti@2.4.2)(lightningcss@1.30.1)(rollup@4.44.0)(typescript@5.8.3))
+      '@nanostores/preact':
+        specifier: ^1.0.0
+        version: 1.0.0(nanostores@1.0.1)(preact@10.26.9)
       '@prisma/adapter-libsql':
         specifier: ^6.11.1
         version: 6.11.1
@@ -62,6 +65,9 @@ importers:
       lucide-preact:
         specifier: ^0.525.0
         version: 0.525.0(preact@10.26.9)
+      nanostores:
+        specifier: ^1.0.1
+        version: 1.0.1
       preact:
         specifier: ^10.26.9
         version: 10.26.9
@@ -760,6 +766,13 @@ packages:
     resolution: {integrity: sha512-UJoqgBG1guLjyo+QgrnsdOWHN0RTU9iPEEybfXczGA5/nUOo0a35r0jA0fBYYi24Nt/tQkLtEKaGprN6csv+4Q==}
     peerDependencies:
       astro: ^4 || ^5
+
+  '@nanostores/preact@1.0.0':
+    resolution: {integrity: sha512-woHYvSwau1YtO9AEnGsh/jRPU2u5DTfNSrDHtKMZOeDUWV6EJfvyv7dJ7AaMps2I9uJcY6OlqXKkA9qTctEjyw==}
+    engines: {node: ^20.0.0 || >=22.0.0}
+    peerDependencies:
+      nanostores: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^1.0.0
+      preact: '>=10.0.0'
 
   '@neon-rs/load@0.0.4':
     resolution: {integrity: sha512-kTPhdZyTQxB+2wpiRcFWrDcejc4JI6tkPuS7UZCG4l6Zvc5kU/gGQ/ozvHTh1XR5tS+UlfAfGuPajjzQjCiHCw==}
@@ -2449,6 +2462,10 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanostores@1.0.1:
+    resolution: {integrity: sha512-kNZ9xnoJYKg/AfxjrVL4SS0fKX++4awQReGqWnwTRHxeHGZ1FJFVgTqr/eMrNQdp0Tz7M7tG/TDaX8QfHDwVCw==}
+    engines: {node: ^20.0.0 || >=22.0.0}
+
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -3909,6 +3926,11 @@ snapshots:
   '@lucide/astro@0.532.0(astro@5.10.0(@types/node@24.0.3)(jiti@2.4.2)(lightningcss@1.30.1)(rollup@4.44.0)(typescript@5.8.3))':
     dependencies:
       astro: 5.10.0(@types/node@24.0.3)(jiti@2.4.2)(lightningcss@1.30.1)(rollup@4.44.0)(typescript@5.8.3)
+
+  '@nanostores/preact@1.0.0(nanostores@1.0.1)(preact@10.26.9)':
+    dependencies:
+      nanostores: 1.0.1
+      preact: 10.26.9
 
   '@neon-rs/load@0.0.4': {}
 
@@ -5868,6 +5890,8 @@ snapshots:
   ms@2.1.3: {}
 
   nanoid@3.3.11: {}
+
+  nanostores@1.0.1: {}
 
   natural-compare@1.4.0: {}
 
