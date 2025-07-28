@@ -4,7 +4,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 
-
+@theme {
+  
+  --breakpoint-xxl: 1400px;
+}
 
 
 
@@ -52,3 +55,60 @@ textarea{
 
 }
 
+
+/* CSS independiente - copia esto completo */
+
+
+@keyframes borderRotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Clase principal del borde animado */
+.border-animated {
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background-size: 300% 300%;
+}
+
+/* Tema oscuro */
+.dark .border-animated {
+
+}
+
+/* Efecto de resplandor */
+.border-animated::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: inherit;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  filter: blur(8px);
+  background-size: 300% 300%;
+
+}
+
+.border-animated:hover::before {
+  opacity: 0.6;
+}
