@@ -1,28 +1,31 @@
 ---
-import {  Notebook, type AstroComponent,LayoutDashboardIcon,Tags } from "@lucide/astro";
+import dashboardIcon from "@/components/icons/dashboard-icon.svg";
+import notesIcon from "@/components/icons/notes-icon.svg";
+import tagsIcon from "@/components/icons/tags-icon.svg";
 
 interface Link {
   href: string;
   label: string;
-  icon?: AstroComponent;
+  icon?: any;
 }
+
 
 const links: Link[] = [ 
 
   {
     href: "/dashboard",
     label: "Dashboard",
-    icon: LayoutDashboardIcon ,
+    icon: dashboardIcon,
   },
   {
     href: "/notes",
     label: "Notes",
-    icon: Notebook ,
+    icon: notesIcon,
   },
   {
     href: "/tasks",
     label: "Tasks",
-    icon: Tags ,
+    icon: tagsIcon,
   },
 ];
 ---
@@ -36,7 +39,6 @@ const links: Link[] = [
     class="h-full px-3 py-4 overflow-y-auto rounded bg-gray-50 dark:bg-gray-800"
   >
     <ul class="space-y-2 font-medium pt-2">
-  
 
       {
         links.map((link) => (
