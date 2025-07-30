@@ -5,12 +5,18 @@ import ContainerHeader from "@/components/containerHeader.astro";
 import Button from "@/components/Button.astro";
 import { Plus, X } from "lucide-preact";
 import { SidenavNotes } from "@/components/sidenavNotes.tsx";
+import DataContainer from "@/components/data-container.astro";
+import Modal from "@/components/modal.astro";
+import { CreateNoteForm } from "@/components/forms/create-note-form.tsx";
+import { CreateTagForm } from "@/components/forms/create-tag-form";
+import NotesComponent from "@/components/notes.astro";
+import SkeletonContainer from "@/components/defer/skeleton-container.astro";
 ---
 
 <SidebarLayout>
   <Container>
     <ContainerHeader title="Mis notas">
-      <Button commandfor="task-modal" command="show-modal" text={"Crear Nota"}>
+      <Button commandfor="notes-modal" command="show-modal" text={"Crear Nota"}>
         <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
       </Button>
 
@@ -22,6 +28,38 @@ import { SidenavNotes } from "@/components/sidenavNotes.tsx";
         <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
       </Button>
     </ContainerHeader>
-    <SidenavNotes client:visible/>
+
+    <DataContainer>
+      <NotesComponent  server:defer>
+        <SkeletonContainer numberOfCards={9} slot="fallback" />
+      </NotesComponent>
+     
+    </DataContainer>
+
+    <SidenavNotes client:visible />
   </Container>
+
+  <Modal id="notes-modal">
+    <Button
+      slot="button"
+      commandfor="notes-modal"
+      command="close"
+      class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+    >
+      <X class="w-6 h-6" slot={"icon-right"} />
+    </Button>
+    <CreateNoteForm slot="content" client:visible />
+  </Modal>
+
+  <Modal id="tag-modal">
+    <Button
+      slot="button"
+      commandfor="tag-modal"
+      command="close"
+      class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+    >
+      <X class="w-6 h-6" slot={"icon-right"} />
+    </Button>
+    <CreateTagForm slot="content" client:visible />
+  </Modal>
 </SidebarLayout>
