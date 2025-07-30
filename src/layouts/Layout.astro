@@ -3,6 +3,8 @@ import Stars from "@/components/stars.astro";
 import Header from "@/components/header.astro";
 import { ClientRouter } from "astro:transitions";
 
+
+
 ---
 
 <!doctype html>
@@ -15,8 +17,8 @@ import { ClientRouter } from "astro:transitions";
     <ClientRouter />
   </head>
   <body class="overflow-x-hidden text-white relative">
-    <Header transition:persist />
-    <Stars transition:persist />
+    <Header  transition:persist id="page-header" />
+    <Stars transition:persist id="page-stars"   />
     <main>
       <slot />
     </main>
