@@ -1,0 +1,112 @@
+---
+import { Calendar, Clock, Eye, FileText } from "lucide-preact";
+import TaskBadge from "@/components/task-badge.astro";
+interface Props {
+  note: any;
+}
+
+const { note } = Astro.props;
+---
+
+<div
+  class={`group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 dark:bg-gray-800/40 dark:hover:bg-gray-800/60 bg-white/70 hover:bg-white/90 backdrop-blur-md hover:shadow-xl border border-white/10`}
+>
+  {/* Gradient overlay */}
+  <div
+    class="absolute inset-0 bg-gradient-to-br dark:from-blue-500/3 dark:via-purple-500/3 dark:to-pink-500/3 dark:group-hover:from-blue-500/8 dark:group-hover:via-purple-500/8 dark:group-hover:to-pink-500/8 transition-all duration-300"
+  >
+  </div>
+
+  {/* Card Content */}
+  <div class="relative p-6">
+    {/* Header with icon and ID */}
+    <div class="flex items-center justify-between mb-4">
+      <div
+        class={`p-2 rounded-lg dark:bg-blue-500/10 bg-blue-50 transition-all duration-300 group-hover:scale-105`}
+      >
+        <FileText class={`w-5 h-5 dark:text-blue-400 text-blue-600`} />
+      </div>
+      <span
+        class={`text-xs font-medium px-2 py-1 rounded-full dark:bg-gray-700/5 dark:text-gray-300 bg-gray-100 text-gray-600`}
+      >
+        #{note.id.toString().padStart(3, "0")}
+      </span>
+    </div>
+
+    {/* Title */}
+    <h3
+      class={`text-lg font-semibold mb-3 dark:text-white  text-gray-900 line-clamp-2 leading-tight`}
+    >
+      {note.title}
+    </h3>
+
+    {/* Description */}
+    <p
+      class={`text-sm leading-relaxed mb-4 dark:text-gray-300 text-gray-600 line-clamp-3`}
+    >
+      {note.description}
+    </p>
+
+    {/* Tags */}
+    <div class="flex flex-wrap gap-2 mb-6">
+      {
+        note.tags.map((tag: any) => (
+          <span class="inline-flex justify-center items-center gap-x-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-400">
+            {tag.name}
+          </span>
+        ))
+      }
+    </div>
+
+    {/* Solutions Button */}
+    <button
+      data-note={note}
+      class={`w-full open-sidenav-btn flex items-center justify-center space-x-2 p-3 rounded-lg transition-all duration-300 hover:scale-[1.02]  dark:from-blue-600/15 dark:to-purple-600/15 dark:hover:from-blue-600/25 dark:hover:to-purple-600/25 dark:text-blue-300 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 text-blue-700`}
+    >
+      <Eye class="w-4 h-4" />
+      <span class="text-sm font-medium">Ver soluciones</span>
+      <span
+        class={`text-xs px-1.5 py-0.5 rounded-full dark:bg-purple-500 0 dark:text-purple-300 bg-purple-100 text-purple-700`}
+      >
+        {/* {note.solutions.length} */}
+      </span>
+    </button>
+
+    {/* Footer with dates */}
+    <div
+      class="flex items-center justify-between text-xs mt-4 pt-4 border-t border-white/5"
+    >
+      <div class="flex items-center space-x-1">
+        <Calendar class={`w-3 h-3 dark:text-gray-400  text-gray-500`} />
+        <span class={"dark:text-gray-400 text-gray-500"}>
+          {/* {formatDate(note.createdAt)} */}
+        </span>
+      </div>
+      {
+        note.updatedAt !== note.createdAt && (
+          <div class="flex items-center space-x-1">
+            <Clock class={`w-3 h-3 dark:text-gray-400  text-gray-500`} />
+            <span class={"dark:text-gray-400 text-gray-500"}>
+              {/* {formatDate(note.updatedAt)} */}
+            </span>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  import { $$ } from "@/lib/dom-selector";
+  import { openSidenav } from "@/stores/sidenav-store.ts";
+
+  const $openSidenavBtns = $$(".open-sidenav-btn");
+
+  $openSidenavBtns.forEach(($btn) => {
+    $btn.addEventListener("click", () => {
+      openSidenav();
+      const {note} = $btn.dataset
+      console.log(note)
+    });
+  });
+</script>
