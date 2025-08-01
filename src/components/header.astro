@@ -7,6 +7,8 @@ import Button from "@/components/Button.astro";
 import UserMenu from "@/components/user-menu.astro";
 
 const session = await getSession(Astro.request);
+const supportedPagesWithSidebar = ["/dashboard", "/notes", "/tasks"];
+
 ---
 
 <header
@@ -15,11 +17,10 @@ const session = await getSession(Astro.request);
   <div class="max-w-7xl mx-auto px-2 flex justify-between w-full items-center">
     <div class="flex justify-between items-center gap-8">
       {
-        session && (
+        session && supportedPagesWithSidebar.includes(Astro.url.pathname) && (
           <button
             id="sidebar-toggle"
-            data-drawer-target="default-sidebar"
-            data-drawer-toggle="default-sidebar"
+          
             aria-controls="default-sidebar"
             type="button"
             class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -66,13 +67,14 @@ const session = await getSession(Astro.request);
         )
       }
 
-      {session?.user && <UserMenu session={session} />}
+      {session?.user && <UserMenu transition:persist session={session} />}
     </div>
   </div>
 </header>
 
 <script>
   import { $ } from "@/lib/dom-selector";
+  
 
   document.addEventListener("astro:page-load", () => {
     const $sidebar = $("#sidebar");
