@@ -9,9 +9,7 @@ interface Link {
   icon?: any;
 }
 
-
-const links: Link[] = [ 
-
+const links: Link[] = [
   {
     href: "/dashboard",
     label: "Dashboard",
@@ -27,7 +25,14 @@ const links: Link[] = [
     label: "Tasks",
     icon: tagsIcon,
   },
+  {
+    href: "tags",
+    label: "Tags",
+    icon: tagsIcon
+  }
 ];
+
+const { pathname } = Astro.url;
 ---
 
 <aside
@@ -39,22 +44,23 @@ const links: Link[] = [
     class="h-full px-3 py-4 overflow-y-auto rounded bg-gray-50 dark:bg-gray-800"
   >
     <ul class="space-y-2 font-medium pt-2">
-
       {
         links.map((link) => (
           <li>
             <a
               href={link.href}
-              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              class={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${pathname === link.href ? "bg-gray-100 dark:bg-gray-700 pointer-events-none" : ""}`}
             >
-              {link.icon && <link.icon class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>}
+              {link.icon && (
+                <link.icon
+                  class={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white ${pathname === link.href ? "text-gray-900 dark:text-white " : ""} `}
+                />
+              )}
               <span class="ms-3">{link.label}</span>
             </a>
           </li>
         ))
       }
-
-  
     </ul>
   </div>
 </aside>
