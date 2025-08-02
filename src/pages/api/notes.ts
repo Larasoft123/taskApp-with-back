@@ -1,11 +1,14 @@
 import { db } from "@/lib/db";
 import { getUserSession } from "@/utils/auth/getSession";
+
 import { type APIRoute } from "astro";
 
 
 
 export const GET: APIRoute = async ({ request }) => {
-  const { userId } = await getUserSession(request);
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+  const userId = searchParams.get("userId");
 
   if (!userId) return new Response("userId is required", { status: 400 });
 
@@ -14,7 +17,14 @@ export const GET: APIRoute = async ({ request }) => {
       where: {
         userId,
       },
+      include:{
+        tags: true, // Incluir las etiquetas asociadas a la nota
+        solutions: true // Incluir las soluciones asociadas a la nota
+      }
     });
+    console.log(result)
+
+
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
     console.log(error);
@@ -32,7 +42,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const data = {
     userId,
-    tags,
+    tags: { connect: tags.map((tagId: number) => ({ id: tagId })) },
     title,
     description,
     solutions
@@ -44,6 +54,7 @@ export const POST: APIRoute = async ({ request }) => {
     });
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
+    console.log(error)
     return new Response(JSON.stringify(error), { status: 500 });
   }
 };
