@@ -107,7 +107,7 @@ if (createdAt && !isNaN(new Date(createdAt).getTime())) {
               text={"Editar"}
              
             />
-            <DeleteButton client:load id={id} />
+            <DeleteButton client:load id={id}  endpoint="task"/>
           </div>
         </div>
       </div>
