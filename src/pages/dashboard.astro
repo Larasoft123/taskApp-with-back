@@ -9,6 +9,8 @@ import SkeletonContainer from "@/components/defer/skeleton-container.astro";
 import {CreateTagForm} from "@/components/forms/create-tag-form";
 import SibebarLayout from "@/layouts/sidebarLayout.astro";
 import Container from "@/components/container.astro";
+import DataContainer from "@/components/data-container.astro";
+import Modal from "@/components/modal.astro"
 
 ---
 
@@ -34,25 +36,23 @@ import Container from "@/components/container.astro";
 
    
     <!-- Main Content -->
-    <div class="pt-24 container mx-auto text-white px-4 sm:px-6 lg:px-8 py-8">
+    <DataContainer >
       <Tasks  server:defer>
         <SkeletonContainer numberOfCards={9} slot="fallback" />
       </Tasks>
-    </div>
+    </DataContainer>
 
   </Container>
 
 
   <!-- Modal para Crear Tarea -->
-  <dialog
+  <Modal
     id="task-modal"
-    class="fixed inset-0 bg-transparent mx-auto my-auto bg-opacity-60 items-center justify-center z-50 transition-opacity duration-300"
+  
   >
-    <div
-    
-      class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl px-20 py-10 inset-0 w-full relative"
-    >
+   
       <Button
+      slot="button"
         commandfor="task-modal"
         command="close"
         class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
@@ -60,29 +60,25 @@ import Container from "@/components/container.astro";
         <X class="w-6 h-6" slot={"icon-right"} />
       </Button>
 
-      <CreateTaskForm client:visible />
-    </div>
-  </dialog>
+      <CreateTaskForm client:visible slot="content" />
+
+    </Modal>
 
   <!-- modal para crear tags -->
-  <dialog
+  <Modal
     id="tag-modal"
-    class="fixed inset-0 bg-transparent mx-auto my-auto bg-opacity-60 items-center justify-center z-50 transition-opacity duration-300"
   >
-    <div
-
-      class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl px-20 py-10 inset-0 w-full relative"
-    >
+ 
       <Button
+      slot="button"
         commandfor="tag-modal"
         command="close"
         class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
       >
         <X class="w-6 h-6" slot={"icon-right"} />
       </Button>
-      <CreateTagForm client:visible/>
-    </div>
-  </dialog>
+      <CreateTagForm slot="content" client:visible />
+    </Modal>
 </SibebarLayout>
 
 
