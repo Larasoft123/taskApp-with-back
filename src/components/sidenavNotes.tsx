@@ -1,13 +1,14 @@
-import { closeSidenav, isSidenavOpen, openSidenav } from "@/stores/sidenav-store";
+import { closeSidenav, isSidenavOpen } from "@/stores/sidenav-store";
 import { selectedNote } from "@/stores/notes-store";
 import { useStore } from '@nanostores/preact';
-import { Calendar, X, ChevronRight, Plus } from 'lucide-preact';
+import { Calendar, X, ChevronRight, } from 'lucide-preact';
 import { SolutionsForm } from "@/components/forms/solutions-form";
-
+import { DeleteButton } from "@/components/delete-button.tsx";
 
 export function SidenavNotes() {
   const $isSidenavOpen = useStore(isSidenavOpen);
   const $selectedNote = useStore(selectedNote);
+
 
 
 
@@ -116,6 +117,12 @@ export function SidenavNotes() {
                             Creado:
                           </span>
                         </div>
+
+                        <div className="flex items-center space-x-1">           
+                         <DeleteButton  id={solution.id}  endpoint="solution"/>
+                        </div>
+
+
                       </div>
                     </div>
                   </div>
