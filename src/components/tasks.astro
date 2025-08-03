@@ -31,7 +31,7 @@ if (status !== "ALL") {
 url.searchParams.append("userId", id);
 
 
-const response = await fetch(`http://localhost:4321/api/tasks?userId=${id}`, {
+const response = await fetch(url, {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -39,6 +39,7 @@ const response = await fetch(`http://localhost:4321/api/tasks?userId=${id}`, {
 });
 
 const tasks: Tasks[] = await response.json();
+// await new Promise((resolve) => setTimeout(resolve, 10000)); // Simula un retraso para la demostración
 ---
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
