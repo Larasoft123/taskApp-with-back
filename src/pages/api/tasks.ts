@@ -1,6 +1,7 @@
 import { type APIRoute } from "astro";
 import { db } from "@/lib/db";
-import { getUserSession } from "@/utils/auth/getSession";
+
+import { Session } from "@/utils/db/session";
 
 
 
@@ -20,7 +21,7 @@ export const GET: APIRoute = async ({ request }) => {
     }
   });
 
-  // await delay(50);
+
 
   return new Response(JSON.stringify(result));
 };
@@ -29,8 +30,10 @@ export const POST: APIRoute = async ({ request }) => {
   const body = await request.json();
   const { title, description, status, type, tags } = body;
 
-  const { userId } = await getUserSession(request);
-  if (!userId) return new Response("userId is required", { status: 400 });
+  const userId = await Session.getUserId(request)
+
+ 
+  if (typeof userId !== "string") return userId;
 
   const data = {
     userId,

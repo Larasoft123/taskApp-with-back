@@ -1,15 +1,16 @@
 import { type APIRoute } from "astro";
 import { db } from "@/lib/db";
-import { getUserSession } from "@/utils/auth/getSession";
+import { Session } from "@/utils/db/session";
 
 export const DELETE: APIRoute = async ({ params, request }) => {
   const id = Number(params.id);
 
   if (!id) return new Response("id is required", { status: 400 });
 
-  const { userId } = await getUserSession(request);
+  
+  const userId = await Session.getUserId(request);
 
-  if (!userId) return new Response("userId is required", { status: 400 });
+   if (typeof userId !== "string") return userId;
 
   try {
     const result = await db.tags.delete({
@@ -30,9 +31,9 @@ export const GET: APIRoute = async ({ params, request }) => {
 
   if (!id) return new Response("id is required", { status: 400 });
 
-  const { userId } = await getUserSession(request);
+   const userId = await Session.getUserId(request);
 
-  if (!userId) return new Response("Unauthorized", { status: 400 });
+   if (typeof userId !== "string") return userId;
 
   try {
     const result = await db.tags.findUnique({
