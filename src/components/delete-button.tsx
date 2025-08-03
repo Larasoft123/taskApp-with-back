@@ -1,7 +1,7 @@
 
 import { navigate } from "astro:transitions/client";
 import { Trash2 } from "lucide-preact";
-import { setSelectedNote,selectedNote } from "@/stores/notes-store";
+import { setSelectedNote, selectedNote } from "@/stores/notes-store";
 import { useStore } from "@nanostores/preact";
 import { closeSidenav } from "@/stores/sidenav-store";
 import type { Note } from "@/utils/types/types";
@@ -18,7 +18,7 @@ export const DeleteButton = ({ id, endpoint }: { id: number, endpoint: string })
       });
 
 
-      if(res.status !== 200) {
+      if (res.status !== 200) {
         alert("Error al eliminar el recurso");
         return;
       }
@@ -30,10 +30,19 @@ export const DeleteButton = ({ id, endpoint }: { id: number, endpoint: string })
 
 
       const index = $selectedNote.solutions.findIndex((solution) => solution.id === id);
-      const newSolutions =$selectedNote.solutions.toSpliced(index, 1);
-      setSelectedNote({ ...$selectedNote, solutions: newSolutions})
-      closeSidenav()
-      return  navigate(window.location.href);
+      const newSolutions = $selectedNote.solutions.toSpliced(index, 1);
+      console.log( {newSolutions});
+      
+
+      const deleteSolutionEvent = new CustomEvent("solution-deleted", {
+        detail: {
+          solutions: newSolutions.length==0  ? [{noteId: $selectedNote.id}] :newSolutions
+        }
+      })
+
+      document.dispatchEvent(deleteSolutionEvent)
+      setSelectedNote({ ...$selectedNote, solutions: newSolutions })
+
 
 
 
