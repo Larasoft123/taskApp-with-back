@@ -1,15 +1,15 @@
 import { type APIRoute } from "astro";
 import { db } from "@/lib/db";
-import { getUserSession } from "@/utils/auth/getSession";
+import { Session } from "@/utils/db/session";
 
 export const DELETE: APIRoute = async ({ params, request }) => {
   const id = Number(params.id);
 
   if (!id) return new Response("id is required", { status: 400 });
 
-  const { userId } = await getUserSession(request);
+  const userId = await Session.getUserId(request);
 
-  if (!userId) return new Response("userId is required", { status: 400 });
+  if (typeof userId !== "string") return userId;
 
   try {
     const result = await db.tasks.delete({
@@ -30,9 +30,9 @@ export const GET: APIRoute = async ({ params, request }) => {
 
   if (!id) return new Response("id is required", { status: 400 });
 
-  const { userId } = await getUserSession(request);
+    const userId = await Session.getUserId(request);
 
-  if (!userId) return new Response("Unauthorized", { status: 400 });
+  if (typeof userId !== "string") return userId;
 
   try {
     const result = await db.tasks.findUnique({
@@ -55,10 +55,10 @@ export const PATCH: APIRoute = async ({ request, params }) => {
   const body = await request.json();
   const { title, description, status, type, tags: newTags } = body;
 
-  const { userId } = await getUserSession(request);
-  if (!userId) return new Response("userId is required", { status: 400 });
 
-  
+  const userId = await Session.getUserId(request);
+  if (typeof userId !== "string") return userId;
+
   const [tagsIds] = await db.tasks.findMany({
     where: {
       id,
@@ -78,37 +78,28 @@ export const PATCH: APIRoute = async ({ request, params }) => {
   const newTagsIdsSet = new Set(newTags);
   const tagsToDelete = oldTagsIdsSet.difference(newTagsIdsSet);
   const tagsToAdd = newTagsIdsSet.difference(oldTagsIdsSet);
- 
-  
-  
-
-  
-
-
-
 
   const data = {
     title,
     description,
     status,
     type,
-    tags: { 
-      disconnect: [...tagsToDelete].map((tag: number) => ({ id: tag })), 
-      connect: [...tagsToAdd].map((tag: number) => ({ id: tag }) ) 
+    tags: {
+      disconnect: [...tagsToDelete].map((tag: number) => ({ id: tag })),
+      connect: [...tagsToAdd].map((tag: number) => ({ id: tag })),
     },
   };
 
   try {
     const result = await db.tasks.update({
       data,
- 
+
       where: {
         id,
         userId,
       },
     });
 
- 
     return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
     console.log(error);

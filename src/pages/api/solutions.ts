@@ -1,46 +1,32 @@
 import { type APIRoute } from "astro";
-import { getSession } from "auth-astro/server";
+
 import { db } from "@/lib/db";
+import { Session } from "@/utils/db/session";
 
 export const GET: APIRoute = async ({ request }) => {
-  const userId = await Validations.userId(request);
-  console.log(userId );
-  if (typeof userId !== "string") {
-    return userId;
-  }
-  const noteId= 0
-
+  const userId = await Session.getUserId(request);
+  if (typeof userId !== "string") return userId;
+  const noteId = 0;
 
   try {
-
-
     const solutions = await db.solutions.findMany({
-        where: {
-            noteId
-        }
-    })
+      where: {
+        noteId,
+      },
+    });
 
     return new Response(JSON.stringify(solutions));
-    
   } catch (e) {
     return new Response("Internal Server Error", {
       status: 500,
     });
-    
   }
-
-
-  
-
-
 };
 
 export const POST: APIRoute = async ({ request }) => {
-  const userId = await Validations.userId(request);
+  const userId = await Session.getUserId(request);
 
-  if (typeof userId !== "string") {
-    return userId;
-  }
+  if (typeof userId !== "string") return userId;
   const data = await request.json();
 
   const newData = {
@@ -61,26 +47,3 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 };
-
-class Validations {
-  static async userId(request: Request) {
-    const session = await getSession(request);
-
-    if (!session) {
-      return new Response("Unauthorized", {
-        status: 401,
-      });
-    }
-
-    const { user } = session;
-    const id = user?.id;
-
-    if (!user || !id) {
-      return new Response("Unauthorized", {
-        status: 401,
-      });
-    }
-
-    return id;
-  }
-}
