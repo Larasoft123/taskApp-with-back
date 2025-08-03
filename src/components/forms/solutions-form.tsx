@@ -2,10 +2,9 @@ import { Save, X } from "lucide-preact";
 import { useForm } from "react-hook-form"
 import { useState } from "preact/hooks";
 import { useStore } from '@nanostores/preact';
-import { closeSidenav } from "@/stores/sidenav-store";
 import { selectedNote, setSelectedNote } from "@/stores/notes-store";
 import type { Note } from "@/utils/types/types";
-import { navigate } from "astro:transitions/client";
+
 
 
 type SolutionFormData = {
@@ -24,7 +23,6 @@ export const SolutionsForm = () => {
         const { title, content } = data;
 
         const id = $selectedNote?.id;
-        console.log($selectedNote.solutions);
 
         const res = await fetch("/api/solutions", {
             method: "POST",
@@ -46,10 +44,19 @@ export const SolutionsForm = () => {
 
         const resData = await res.json();
 
-        closeSidenav()
+        const createSolutionEvent = new CustomEvent("solution-created", {
+            detail: {
+                solution: resData
+            }
+        })
+        document.dispatchEvent(createSolutionEvent)
+
+
+        const newNote = { ...$selectedNote, solutions: [...$selectedNote.solutions, resData] }
+        setSelectedNote(newNote)
+
+        
         closeForm()
-        setSelectedNote({ ...$selectedNote, solutions: [...$selectedNote.solutions, resData] })
-        navigate(window.location.href)
 
     }
 
