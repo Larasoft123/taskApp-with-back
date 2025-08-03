@@ -8,6 +8,12 @@ import { getUserById } from "@/utils/auth/user";
 
 
 
+
+// Una función para manejar la lógica de renovar el token
+
+
+
+
 export default defineConfig({
   adapter: PrismaAdapter(db),
 
@@ -16,20 +22,24 @@ export default defineConfig({
     Google({
       clientId: config.env.GOOGLE_CLIENT_ID,
       clientSecret: config.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
   ],
 
-  
-  
-
   session: {
     strategy: "jwt",
+    maxAge: 60 *60 * 24 * 7, // 7 days
   },
 
   pages: {
     error: "/auth/error",
-    signIn: "/auth"
-
+    signIn: "/auth",
   },
   theme: {
     colorScheme: "dark",
@@ -38,19 +48,23 @@ export default defineConfig({
     jwt: async ({ token }) => {
       if (!token.sub) return token;
 
- 
       const user = await getUserById(token.sub);
-      if (!user) return token;
-
       
+      if (!user) return null;
+
       token.name = user.name;
       token.email = user.email;
       token.picture = user.image;
+
+      // 1. Si el token no tiene refreshToken, no podemos refrescarlo
+      
 
       return token;
     },
 
     signIn: async (params) => {
+      console.log({ params });
+
       return true;
     },
 
@@ -58,10 +72,9 @@ export default defineConfig({
       if (session.user && token.sub) {
         session.user.id = token.sub;
       }
+     
 
       return session;
     },
   },
-
-
 });
