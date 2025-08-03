@@ -109,6 +109,7 @@ model Tags {
   userId String 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   name String
+  color String 
   tasks Tasks[]
   notes Notes[]
   createdAt DateTime @default(now())
