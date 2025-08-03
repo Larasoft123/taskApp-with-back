@@ -3,16 +3,82 @@
 import SidebarLayout from "@/layouts/sidebarLayout.astro";
 import Container from "@/components/container.astro";
 import ContainerHeader from "@/components/containerHeader.astro";
+import { CreateTaskForm } from "@/components/forms/create-task-form.tsx";
+import Button from "@/components/Button.astro";
+import { Plus, X } from "lucide-preact";
+import TasksComponent from "@/components/tasks.astro";
+import SkeletonContainer from "@/components/defer/skeleton-container.astro";
+import {CreateTagForm} from "@/components/forms/create-tag-form";
+import DataContainer from "@/components/data-container.astro";
+import Modal from "@/components/modal.astro"
+
 ---
 
 <SidebarLayout>
-    
-    <Container>
+  <Container
+  >
+    <!-- Header -->
 
-        <ContainerHeader title="Mis tareas">
+    <ContainerHeader title="Mi Dashboard">
+      <Button
+        commandfor="task-modal"
+        command="show-modal"
+        text={"Crear Tarea"}
+      >
+        <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
+      </Button>
 
-        </ContainerHeader>
+      <Button text={"Crear Etiqueta"} commandfor="tag-modal" command="show-modal">
+        <Plus class="w-4 h-4 mr-2" slot={"icon-left"} />
+      </Button>
+    </ContainerHeader>
 
-    </Container>
 
+   
+    <!-- Main Content -->
+    <DataContainer >
+      <TasksComponent  server:defer>
+        <SkeletonContainer numberOfCards={9} slot="fallback" />
+      </TasksComponent>
+    </DataContainer>
+
+  </Container>
+
+
+  <!-- Modal para Crear Tarea -->
+  <Modal
+    id="task-modal"
+  
+  >
+   
+      <Button
+      slot="button"
+        commandfor="task-modal"
+        command="close"
+        class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+      >
+        <X class="w-6 h-6" slot={"icon-right"} />
+      </Button>
+
+      <CreateTaskForm client:visible slot="content" />
+
+    </Modal>
+
+  <!-- modal para crear tags -->
+  <Modal
+    id="tag-modal"
+  >
+ 
+      <Button
+      slot="button"
+        commandfor="tag-modal"
+        command="close"
+        class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+      >
+        <X class="w-6 h-6" slot={"icon-right"} />
+      </Button>
+      <CreateTagForm slot="content" client:visible />
+    </Modal>
 </SidebarLayout>
+
+
