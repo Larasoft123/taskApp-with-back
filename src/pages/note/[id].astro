@@ -1,0 +1,26 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Container from "@/components/container.astro";
+
+import { getSession } from "auth-astro/server";
+import { CreateNoteForm } from "@/components/forms/create-note-form";
+
+const session = await getSession(Astro.request);
+const { id } = Astro.params;
+
+if (!session || !session?.user?.id ) {
+  throw new Error("Unauthorized access. Please log in.");
+}
+
+
+
+if (!id) {
+  throw new Error("Task ID is required");
+}
+---
+
+<Layout>
+  <Container>
+    <CreateNoteForm client:visible edit={true} noteId={+id} />
+  </Container>
+</Layout>
