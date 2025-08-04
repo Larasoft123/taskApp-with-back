@@ -3,14 +3,29 @@ import { db } from "@/lib/db";
 import { Session } from "@/utils/db/session";
 
 export const GET: APIRoute = async ({ request }) => {
-  const userId = await Session.getUserId(request);
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+  let userId: string | null | Response = searchParams.get("userId");
 
-   if (typeof userId !== "string") return userId;
+  if (!userId) {
+    userId = await Session.getUserId(request);
+    if (typeof userId !== "string") return userId;
+  }
+
+  if (!userId) return new Response("userId is required", { status: 400 });
 
   try {
     const tags = await db.tags.findMany({
       where: {
         userId,
+      },
+      include: {
+        tasks: true,
+        notes: true,
+      },
+
+      omit: {
+        userId: true,
       },
     });
 
@@ -27,7 +42,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const userId = await Session.getUserId(request);
 
-   if (typeof userId !== "string") return userId;
+  if (typeof userId !== "string") return userId;
 
   const data = {
     userId,
