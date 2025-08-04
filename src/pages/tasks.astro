@@ -11,6 +11,16 @@ import SkeletonContainer from "@/components/defer/skeleton-container.astro";
 import {CreateTagForm} from "@/components/forms/create-tag-form";
 import DataContainer from "@/components/data-container.astro";
 import Modal from "@/components/modal.astro"
+import type { TypeTask, Status } from "@prisma/client";
+
+
+const localUrl = new URL(Astro.request.url);
+const searchParams = localUrl.searchParams;
+const type = searchParams.get("type") as TypeTask | null;
+const status = searchParams.get("status") as Status | null;
+
+
+
 
 ---
 
@@ -37,7 +47,7 @@ import Modal from "@/components/modal.astro"
    
     <!-- Main Content -->
     <DataContainer >
-      <TasksComponent  server:defer>
+      <TasksComponent type={type} status={status} server:defer>
         <SkeletonContainer numberOfCards={9} slot="fallback" />
       </TasksComponent>
     </DataContainer>
