@@ -27,7 +27,7 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
 
 
 
-  const { reset, setValue, control, register, handleSubmit, formState: { isSubmitting, errors } } = useForm<CreateTaskFormData>({
+  const { reset, setValue,  register, handleSubmit, formState: { isSubmitting, errors } } = useForm<CreateTaskFormData>({
     defaultValues: {
       tags: []
     }
@@ -45,6 +45,7 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
           const tagsData = await tagsRes.json();
           setDisponibleTags(tagsData);
         }
+        console.log("obetiendo tags")
       } catch (error) {
         console.error("Fallo al obtener las etiquetas:", error);
       }
@@ -103,7 +104,7 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
           description,
           status,
           type,
-          tags // Asegúrate de que el backend pueda manejar esto
+          tags 
         }),
       });
 
@@ -125,10 +126,13 @@ export function CreateTaskForm({ edit = false, taskId }: CreateTaskFormProps) {
       })
     });
 
+    console.log(res);
+    
     if (res.status !== 200) return
+    
 
     reset()
-    navigate(window.location.href)
+    navigate("/tasks")
   }
 
 

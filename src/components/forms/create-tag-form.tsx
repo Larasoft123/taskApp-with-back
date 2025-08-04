@@ -1,11 +1,18 @@
 import { useForm } from 'react-hook-form';
 import { ListTodo, Palette, Sparkles } from "lucide-preact";
 import { navigate } from 'astro:transitions/client';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 
 type CreateTagFormData = { name: string; color: string };
-export function CreateTagForm() {
+
+interface Props {
+    edit?: boolean;
+    tagId?: number;
+}
+
+
+export function CreateTagForm({ edit = false, tagId }: Props) {
 
     const { reset, register, handleSubmit, setValue, getValues, formState: { isSubmitting } } = useForm<CreateTagFormData>({
         defaultValues: {
@@ -18,8 +25,29 @@ export function CreateTagForm() {
         const { name, color } = data
 
 
-        const res = await fetch("/api/tags", {
-            method: "POST",
+        if (!edit) {
+            const res = await fetch("/api/tags", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name,
+                    color
+                }),
+            });
+
+            if (res.status !== 200) return
+            const result = await res.json()
+
+            reset()
+            return navigate(window.location.href)
+
+        }
+
+
+        const res = await fetch(`/api/${tagId}/tag`, {
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -31,13 +59,31 @@ export function CreateTagForm() {
 
         if (res.status !== 200) return
         const result = await res.json()
-        console.log(result)
 
         reset()
-        return navigate(window.location.href)
+        return navigate("/tags")
+
+
 
 
     }
+
+    useEffect(() => {
+
+        if (!edit) return
+
+        console.log('aaaaaaaaaaaa');
+        
+        const fetchData = async () => {
+            const res = await fetch(`/api/${tagId}/tag`);
+            const data = await res.json();
+            setValue('name', data.name)
+            setValue('color', data.color)
+        }
+
+
+        fetchData()
+    }, [])
 
     const [isGeneratingColor, setIsGeneratingColor] = useState(false);
 
@@ -82,9 +128,9 @@ export function CreateTagForm() {
                 <form onSubmit={handleSubmit(onSubmit)} className="py-8 space-y-8">
                     <div className="">
                         <div className="space-y-2 flex flex-col sm:flex-row sm:gap-8">
-                        
-                        
-                         <div className="flex-1" >
+
+
+                            <div className="flex-1" >
 
                                 <label htmlFor="name" className="flex items-center mb-2 gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
                                     <ListTodo className="w-4 h-4" /> Nombre
@@ -145,8 +191,14 @@ export function CreateTagForm() {
                     </div>
 
                     <div className="flex justify-end gap-x-4 pt-8 border-t border-gray-200 dark:border-gray-700">
+
+
+                        <a href={"/tags"} className="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Cancelar
+                        </a>
+
                         <button type="submit" disabled={isSubmitting} className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                            {isSubmitting ? 'Creando...' : 'Crear Etiqueta'}
+                            {isSubmitting ? 'Guardando...' : edit ? "Editar Etiqueta" : "Crear  Etiqueta"}
                         </button>
                     </div>
                 </form>

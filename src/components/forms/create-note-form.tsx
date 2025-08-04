@@ -18,7 +18,7 @@ interface CreateTaskFormProps {
   // Podrías añadir una función `onSubmitSuccess` para manejar el estado en el componente padre
   // onSubmitSuccess?: (newTask: any) => void;
 }
-type CreateTaskFormData = { title: string; description?: string;  tags: number[], solutions: [] };
+type CreateTaskFormData = { title: string; description?: string;  tags: number[],  };
 
 
 export function CreateNoteForm({ edit = false, noteId }: CreateTaskFormProps) {
@@ -30,7 +30,6 @@ export function CreateNoteForm({ edit = false, noteId }: CreateTaskFormProps) {
   const { reset, setValue, control, register, handleSubmit, formState: { isSubmitting, errors } } = useForm<CreateTaskFormData>({
     defaultValues: {
       tags: [],
-      solutions: []
     }
   })
   const [disponibleTags, setDisponibleTags] = useState<Tag[]>([])
@@ -54,9 +53,9 @@ export function CreateNoteForm({ edit = false, noteId }: CreateTaskFormProps) {
       // 2. Si estamos en modo edición, obtener los datos de la tarea
       if (edit && noteId) {
         try {
-          const taskRes = await fetch(`/api/${noteId}/task`);
-          const data = await taskRes.json();
-          const { title, type, description, status, tags } = data;
+          const noteRed = await fetch(`/api/${noteId}/note`);
+          const data = await noteRed.json();
+          const { title,  description, tags } = data;
           setValue("title", title);
           setValue("description", description);
    
@@ -112,20 +111,20 @@ export function CreateNoteForm({ edit = false, noteId }: CreateTaskFormProps) {
       return
     }
 
-    const res = await fetch(`/api/${noteId}/task`, {
+    const res = await fetch(`/api/${noteId}/note`, {
       method: "PATCH",
       body: JSON.stringify({
         title,
         description,
 
-        tags // Asegúrate de que el backend pueda manejar esto
+        tags 
       })
     });
 
     if (res.status !== 200) return
 
     reset()
-    navigate(window.location.href)
+    navigate("/notes")
   }
 
 
@@ -200,7 +199,7 @@ export function CreateNoteForm({ edit = false, noteId }: CreateTaskFormProps) {
 
           <div className="flex justify-end gap-x-6 pt-2">
             
-            <a href={"/dashboard"} className="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed">
+            <a href={"/notes"} className="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed">
               Cancelar
             </a>
 
